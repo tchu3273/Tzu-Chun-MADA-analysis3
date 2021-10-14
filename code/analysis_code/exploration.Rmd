@@ -1,0 +1,178 @@
+---
+title: "Exploration"
+author: "TChu"
+date: "10/13/2021"
+output: html_document
+---
+
+# load required packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here) #to set path for importing data
+library(dplyr) #for data wrangling and cleaning
+library(ggplot2) #for data visualization
+library(tidyverse) # load all packages for data wrangling and cleaning
+library(gtsummary)
+library(flextable)
+```
+
+# load data
+```{r}
+processdata <- readRDS(here::here("data","processed_data","processeddata.rds"))
+
+# check the data
+str(processdata)
+glimpse(processdata)
+
+
+```
+
+For this week's exercise, the main continuous outcome of interest is **body temperature** and categorical outcome of interest is **nausea**. I will focus on 6 other covariates listed as follows, and explore their correlation and association with the outcomes of interest. 
+**List of covariates:**
+* Swollen Lymph Nodes (Yes/No)
+* Fatigue (Yes/No)
+* Runny Nose (Yes/No)
+* Diarrhea (Yes/No)
+* Breathless (Yes/No)
+* Wheeze (Yes/No)
+
+# Descriptive summary table 
+```{r, DescriptiveTable}
+processdata %>% 
+# select only important variables
+  select("SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze","BodyTemp","Nausea") %>% 
+  tbl_summary() %>% 
+  modify_header(label ~ "**Variable**") %>% 
+  bold_labels()  %>%
+  as_flex_table()
+```
+
+The first table contains a descriptive summary of all outcome variables and predictors of interest. Now, I would like to explore whether there is difference in the distribution of these clinical signs between presence of nausea. 
+
+# Descriptive summary table stratified by presence of nausea
+```{r, DescriptiveTableNausea}
+finaldata <- processdata %>% 
+# select only important variables
+  select("SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze","BodyTemp","Nausea")
+# create summary table
+finaldata %>% 
+  tbl_summary(by = Nausea) %>% 
+  modify_header(label ~ "**Variable**") %>% 
+  bold_labels()  %>%
+  as_flex_table()
+```
+
+As shown in the table, the prevalence of clinical symptoms such as fatigue, diarrhea and breathless appeared to be higher among those individuals with presence of nausea compared to those without presence of nausea. 
+
+# plotting for the continuous outcome, body temperature
+```{r, OutcomePlotTemp}
+finaldata %>% 
+ggplot(aes(x=BodyTemp)) + 
+  geom_histogram(bins = 50) +
+  scale_x_continuous(limits = c(97, 104), breaks = seq(97,103,1)) +
+  xlab("Body temperature") +
+  ylab("Frequency") +
+  ggtitle("Histogram of body temperature") +
+  theme_bw()
+
+```
+
+The range of body temperature spans from around 97 to 103 degrees, and peaks between 98 and 99 degrees. The distribution is right-skewed. 
+
+# plotting for the categorical outcome, nausea
+```{r, OutcomePlotNausea}
+finaldata %>% 
+ggplot(aes(x=Nausea, fill=Nausea)) + 
+  geom_bar( width = 0.7) +
+  scale_fill_manual("Nausea", values = c("orange","brown")) +
+  xlab("Presence of nausea") +
+  ylab("Frequency") +
+  ggtitle("Bar plot of presence of nausea") +
+  theme_bw()
+```
+
+From summary table, we know that 35% of individuals had nausea. 
+
+# plotting for all predictors of interest
+```{r, plot}
+finaldata %>% 
+# create subject ID for plotting purpose
+  mutate(ID = seq(1,730,1)) %>% 
+# select predictors of interests
+  select("ID","SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze") %>% 
+  pivot_longer(!ID,names_to = "predictor", values_to = "count") %>% 
+# create bar plot for each predictor of interest 
+ggplot(aes(x=count, fill=count)) + 
+  geom_bar() +
+  xlab("") +
+  ylab("Frequency") +
+  scale_fill_manual("Presence of symptom", values = c("#8ABB80","#E66767")) +
+  ggtitle("Stacked barplot for each predictor of interest") +
+# wrap multiple plots together
+  facet_wrap(~predictor) +
+  theme_bw()
+```
+
+It looks like majority of the individuals had signs of fatigue and runny nose (>50%), and diarrhea is rare. So far, we have looked at the distribution of each outcome variables and predictors of interest separately. Now, I am interest to know whether prevalence of nausea differs between those with or without predictor of interest. Hence, I will plot a stacked barplot showing the frequency of each symptom grouped by presence of nausea.   
+
+# plotting for all predictors of interest by nausea (Stacked barplot)
+```{r, StackedPlot}
+finaldata %>% 
+# select predictors of interests
+  select("Nausea","SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze") %>% 
+  pivot_longer(!Nausea,names_to = "predictor", values_to = "count") %>% 
+# create bar plot for each predictor of interest 
+ggplot(aes(x=count, fill=Nausea)) + 
+  geom_bar() +
+  xlab("Presence of symptom") +
+  ylab("Frequency") +
+  scale_fill_manual("Nausea", values = c("#8ABB80","#E66767")) +
+  ggtitle("Stacked barplot for each predictor of interest stratefied by nausea") +
+# wrap multiple plots together
+  facet_wrap(~predictor) +
+  theme_bw()
+```
+
+The presentation of the plots makes it a bit difficult to compare the percentage of nausea between groups. Let's try again and this time I will create a percent stacked barplot. 
+
+# plotting for all predictors of interest by nausea (Percent stacked barplot)
+```{r, PercStackedPlot}
+finaldata %>% 
+# select predictors of interests
+  select("Nausea","SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze") %>% 
+  pivot_longer(!Nausea,names_to = "predictor", values_to = "count") %>% 
+# create bar plot for each predictor of interest 
+ggplot(aes(x=count, fill=Nausea)) + 
+  geom_bar(position="fill") +
+  xlab("Presence of symptom") +
+  ylab("Frequency") +
+  scale_fill_manual("Nausea", values = c("#8ABB80","#E66767")) +
+  ggtitle("Percent stacked barplot for each predictor of interest stratefied by nausea") +
+# wrap multiple plots together
+  facet_wrap(~predictor) +
+  theme_bw()
+```
+
+The barplot shows that presence of nausea were higher among those individual with signs of breathlessness, diarrhea and fatigue. However, the presence of nausea appears to be similar between those with or without runny nose, swollen lymph nodes or wheeze. In order to explore the relation between continuous outcome variable, body temperature and each predictors, I will also create a boxplot for each predictor 
+
+
+```{r, BoxPlot}
+finaldata %>% 
+# select predictors of interests
+  select("BodyTemp","Nausea","SwollenLymphNodes","Fatigue","RunnyNose","Diarrhea","Breathless",
+  			 "Wheeze") %>% 
+  pivot_longer(3:8,names_to = "predictor", values_to = "count") %>% 
+# grouped boxplot
+  ggplot(aes(x=count, y=BodyTemp, fill=Nausea)) + 
+    geom_boxplot() +
+    xlab("") +
+    facet_wrap(~predictor, scale="free")
+  
+```
+
+It doesn't look like there are much difference in body temperature between those individuals with or without presence of different clinical symptoms. 
