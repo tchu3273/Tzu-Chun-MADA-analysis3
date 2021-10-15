@@ -3,5 +3,7 @@ The purpose of this repository is to perform data wrangling, cleaning, explorato
 
 # Description of datafiles and R codes
 You can find the *processeddata.rds* under the data folder that was generated using the *processingscript.R* under the code folder. 
+
 *exploration.Rmd* produces tables and plottings to explore the relation between our predictors of interests and two main outcomes. 
+
 *analysisscript.R* generated the results from linear regression model and generalized linear regression model and compare the model fits. 
