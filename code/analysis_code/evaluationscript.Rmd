@@ -1,0 +1,188 @@
+---
+title: "Module 9 exercise: Model Fitting and Evaluation"
+author: "Tzu-Chun Chu"
+date: "10/20/2021"
+output: html_document
+---
+
+# load required packages
+```{r setup, warning=F}
+
+library(here) # set path to load data
+library(tidymodels) # for the recipes package and other functions in tidymodels
+library(tidyverse) # data wrangling
+library(parsnip) # for model fitting
+library(rsample) # for splitting data
+library(yardstick) # for creating roc curve
+```
+
+# Load data
+```{r data}
+clean.data <- readRDS(here::here("data","processed_data","processeddata.rds"))
+
+```
+
+
+# Data splitting: 
+```{r splitting}
+# Fix the random numbers by setting the seed 
+# This enables the analysis to be reproducible when random numbers are used 
+set.seed(1234)
+
+# Put 3/4 of the data into the training set 
+data_split <- initial_split(clean.data, prop = 3/4)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+
+```
+
+# Workflow creation and model fitting (categorical outcome: Nausea)
+```{r}
+# Initiate new recipe
+SymptAct_rec <- 
+  recipe(Nausea ~ ., data = train_data) 
+
+# Set a engine
+glm_mod <- 
+  logistic_reg() %>% 
+  set_engine("glm")
+
+# Pair a model and recipe together using model workflow
+SymptAct_wflow <- 
+  workflow() %>% 
+  add_model(glm_mod) %>% 
+  add_recipe(SymptAct_rec)
+
+SymptAct_wflow
+```
+
+
+```{r}
+# Prepare recipe and train the model 
+SymptAct_fit <- 
+  SymptAct_wflow %>% 
+  fit(data = train_data)
+
+SymptAct_fit
+
+# Extract model objects from the workflow and get a tidy tibble of model coefficients
+SymptAct_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+
+SymptAct_fit
+```
+
+
+# Model 1 evaluation 
+```{r}
+# Predict the unseen test data 
+predict(SymptAct_fit, test_data)
+```
+Outcome is binary variable (factor), hence the outcome class: Yes versus No was returned. In order to return the predicted probabilities for each nausea status instead. We will specify type = "prob" in the predict() or use augment() with the model plus test data to save them together. 
+
+
+```{r}
+# Returns predicted probabilities for outcome status on training and test data
+SymptAct_aug_train <- 
+	augment(SymptAct_fit, train_data)
+SymptAct_aug_train
+
+SymptAct_aug_test <- 
+	augment(SymptAct_fit, test_data)
+SymptAct_aug_test
+
+# The data look like: 
+SymptAct_aug_train %>%
+  select(Nausea, .pred_class, .pred_Yes)
+
+SymptAct_aug_test %>%
+  select(Nausea, .pred_class, .pred_Yes)
+
+```
+
+
+# ROC curve 
+```{r}
+# In yardstick, the default is to use the first level, and the first level of Nausea is "No", so event_level argument was used to specify the second level as the event
+SymptAct_aug_train %>% 
+  roc_curve(truth = Nausea, .pred_Yes, event_level = "second") %>% 
+  autoplot()
+
+SymptAct_aug_test %>% 
+  roc_curve(truth = Nausea, .pred_Yes, event_level = "second") %>% 
+  autoplot()
+
+# estimate the auc
+SymptAct_aug_train %>% 
+  roc_auc(truth = Nausea, .pred_Yes, event_level = "second")
+
+SymptAct_aug_test %>% 
+  roc_auc(truth = Nausea, .pred_Yes, event_level = "second")
+```
+
+For training data, AUC = 0.78, demonstrates a good discriminative ability of the model (model performs better in training data as expected).
+For test data, AUC = 0.74, demonstrates a good discriminative ability of the model.
+
+
+# Alternative model (only fit runny nose as the main predictor to the categorical outcome)
+```{r}
+# Set a new recipe with runny nose
+new_SymptAct_rec <- 
+  recipe(Nausea ~ RunnyNose, data = train_data) 
+
+# New workflow with runny nose
+new_SymptAct_wflow <- 
+  workflow() %>% 
+  add_model(glm_mod) %>% 
+  add_recipe(new_SymptAct_rec)
+
+new_SymptAct_wflow
+
+# Fit the model with runny nose
+new_SymptAct_fit <- 
+  new_SymptAct_wflow %>% 
+  fit(data = train_data)
+new_SymptAct_fit
+
+```
+
+
+# Evaluate ROC on train data 
+```{r}
+new_SymptAct_aug_train <- 
+	augment(new_SymptAct_fit, train_data)
+
+
+# ROC curve
+new_SymptAct_aug_train %>% 
+  roc_curve(truth = Nausea, .pred_Yes, event_level = "second") %>% 
+  autoplot()
+
+# Estimate auc
+new_SymptAct_aug_train %>% 
+  roc_auc(truth = Nausea, .pred_Yes, event_level = "second")
+
+```
+
+
+# Evaluate ROC curves on test data 
+```{r}
+new_SymptAct_aug_test <- 
+	augment(new_SymptAct_fit, test_data)
+
+
+# ROC curve
+new_SymptAct_aug_test %>% 
+  roc_curve(truth = Nausea, .pred_Yes, event_level = "second") %>% 
+  autoplot()
+
+# Estimate auc
+new_SymptAct_aug_test %>% 
+  roc_auc(truth = Nausea, .pred_Yes, event_level = "second")
+
+```
+
+The AUC for the single variable model on both training and test data performed poorly (AUCs are close to 0.5).
