@@ -186,3 +186,116 @@ new_SymptAct_aug_test %>%
 ```
 
 The AUC for the single variable model on both training and test data performed poorly (AUCs are close to 0.5).
+
+
+# Part Two - Savannah's Contribution 
+Since the data is already split, I'll start by creating a new recipe and workflow for the continuous outcome (body temperature).
+
+## Body Temperature and all Predictor Variables 
+
+```{r}
+#Initiate a new recipe 
+Temp_rec <- recipe(BodyTemp ~ ., data = train_data)
+
+#Set engine 
+lm_mod <- linear_reg() %>% 
+  set_engine('lm')
+
+#Pair a model and recipe together using model workflow
+Temp_Workflow <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(Temp_rec)
+
+Temp_Workflow
+
+#Prepare recipe and train model 
+Temp_Fit <- Temp_Workflow %>% 
+  fit(data = train_data)
+
+Temp_Fit
+
+# Extract model objects from the workflow and get a tidy tibble of model coefficients
+Temp_Fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy() %>% 
+  knitr::kable()
+
+#Model Evaluation:
+#Predict unseen test data 
+predict(Temp_Fit, test_data)
+
+# Returns predicted probabilities for outcome status on training and test data
+#Test
+Temp_Aug_Test <- augment(Temp_Fit, test_data)
+#View the data:
+Temp_Aug_Test %>% 
+  select(BodyTemp, .pred)
+#Train
+Temp_Aug_Train <- augment(Temp_Fit, train_data)
+#View the data:
+Temp_Aug_Train %>% 
+  select(BodyTemp, .pred)
+
+#Using RMSE to compare model fits  
+#Test 
+Temp_Aug_Test %>% 
+  rmse(truth = BodyTemp, .pred)
+#Train
+Temp_Aug_Train %>% 
+  rmse(truth = BodyTemp, .pred)
+```
+
+When comparing the two models, the model seems to fit the train data better. This can be seen in the lower RMSE value of the train data (1.12) than the test data (1.15). 
+
+## Body Tempurature and Runny Nose 
+```{r}
+#Initiate a new recipe 
+Temp_Run_rec <- recipe(BodyTemp ~ RunnyNose, data = train_data)
+
+#Pair a model and recipe together using model workflow
+Temp_Run_Workflow <- workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(Temp_Run_rec)
+
+Temp_Run_Workflow
+
+#Prepare recipe and train model 
+Temp_Run_Fit <- Temp_Run_Workflow %>% 
+  fit(data = train_data)
+
+Temp_Run_Fit
+
+# Extract model objects from the workflow and get a tidy tibble of model coefficients
+Temp_Run_Fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy() %>% 
+  knitr::kable()
+
+#Model Evaluation:
+#Predict unseen test data 
+predict(Temp_Run_Fit, test_data)
+
+# Returns predicted probabilities for outcome status on training and test data
+#Test
+Temp_Run_Aug_Test <- augment(Temp_Run_Fit, test_data)
+#View the data:
+Temp_Run_Aug_Test %>% 
+  select(BodyTemp, .pred)
+#Train
+Temp_Run_Aug_Train <- augment(Temp_Run_Fit, train_data)
+#View the data:
+Temp_Run_Aug_Train %>% 
+  select(BodyTemp, .pred)
+
+#Using RMSE to compare model fits  
+#Test 
+Temp_Run_Aug_Test %>% 
+  rmse(truth = BodyTemp, .pred)
+#Train
+Temp_Run_Aug_Train %>% 
+  rmse(truth = BodyTemp, .pred)
+```
+
+In the data with just the Runny Nose predictor, the model fit the test data (RMSE = 1.13) better than the train data (RMSE = 1.21).
+
+Overall, the best model fit was the model including all predictor variables when fit to the training data, as this had the lowest RMSE error (1.12).
