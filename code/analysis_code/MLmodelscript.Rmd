@@ -48,7 +48,7 @@ processdata2 <- processdata %>%
 	) 
 
 # Look up the number of each entries for binary variables
-summary(dat.clean)
+summary(processdata2)
 #Vision and Hearing have <50 entries in one category     
 
 dat.clean <- processdata2 %>% 
@@ -164,7 +164,7 @@ tree_spec <-
   set_engine("rpart") %>% 
   set_mode("regression")
 
-tune_spec
+tree_spec
 
 # we will train this specification on several re-sampled data
 tree_wf <- workflow() %>% 
@@ -295,11 +295,11 @@ lasso_res <- lasso_wf %>%
 best_lasso <- select_best(lasso_res)
 
 # Finalize workflow with best values
-final_lasso<- lasso_wf  %>% 
+final_lasso_wf <- lasso_wf  %>% 
   finalize_workflow(best_lasso)
 
 # Fit model to training data
-best_lasso_train_fit <- final_lasso %>%  fit(data = train_data)
+best_lasso_train_fit <- final_lasso_wf %>%  fit(data = train_data)
 ```
 
 ## Diagnostics plots
@@ -404,11 +404,11 @@ best_rf <-
 best_rf
 
 # Finalize workflow with best values
-final_rf<- rf_wf  %>% 
+final_rf_wf <- rf_wf  %>% 
   finalize_workflow(best_rf)
 
 # Fit model to training data
-best_rf_train_fit <- final_rf %>%  fit(data = train_data)
+best_rf_train_fit <- final_rf_wf %>%  fit(data = train_data)
 
 ```
 
@@ -464,11 +464,40 @@ knitr::include_graphics( here::here("results", "figures", "random_forest_panel.p
 
 ## Model selection
 
-We can see that LASSO had better fit compared to both decision tree and random forest methods. Looking at the predicted values vs observed plot for the decision tree, it only predicts four distinct values of the body temperature, and other two methods did better. However, there are also some issue with predicting higher body temperature. So, I will 
+We can see that LASSO had better fit compared to both decision tree and random forest methods. Looking at the predicted values vs observed plot for the decision tree, it only predicts four distinct values of the body temperature, and other two methods did better. However, there are also some issue with predicting higher body temperature. So, I will fit the choosen LASSO model to the test data and evaluate the performance.
 
 
 ## Final evaluation
 ```{r}
+# evaluate how model perform on test set
+last_rf_fit <- final_lasso_wf %>% 
+  last_fit(split = data_split, 
+  				 metrics = metric_set(rmse))
 
+last_rf_fit %>% 
+  collect_metrics()
+```
+```{r}
+# rmse for LASSO model fitting on testing data
+lasso_test_rmse <- collect_metrics(last_rf_fit) %>% 
+  dplyr::select(rmse = .estimate) %>% 
+  dplyr::mutate(data = "testing")
+
+# rmse for LASSO model fitting on training data  
+lasso_RMSE_train <- lasso_res %>% 
+  show_best(n = 1) %>% 
+  dplyr::transmute(
+    rmse = round(mean, 4),
+    SE = round(std_err, 4),
+    model = "LASSO"
+  ) 
+
+lasso_RMSE_train %>% 
+  dplyr::transmute(
+    rmse, data = "training"
+  ) %>% 
+  bind_rows(lasso_test_rmse) %>% 
+  gt::gt(caption = "Comparison of RMSE between traing and testing data using LASSO regression.")
 ```
 
+The result shows that the final LASSO model fits were similar between training and testing data. However, this model doesn't seem to perform any better than the Null model. 
