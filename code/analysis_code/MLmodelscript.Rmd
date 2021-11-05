@@ -1,0 +1,474 @@
+---
+title: "Machine Learning Model fitting"
+author: "Tzu-Chun Chu"
+date: "11/4/2021"
+output: html_document
+---
+
+## Load needed packages
+```{r setup, include=FALSE}
+library(tidymodels) #for model fitting 
+library(tidyverse) #for data processing 
+library(rsample) #for data splitting 
+library(parsnip)
+library(rpart) # for tree-based model
+library(glmnet) #
+library(ranger) #
+library(dials) # for creating a grid of values
+library(rpart.plot) # for visualizing decision tree
+library(vip) # estimate variable importance based on the model’s structure
+library(ggpubr) # ggarrange
+```
+
+## load data
+```{r,}
+processdata <- readRDS(here::here("data","processed_data","processeddata.rds"))
+
+```
+
+## Pre-processing
+```{r, echo=FALSE}
+
+# check which symptom variables have both multiple levels and Yes/No
+str(processdata)
+## CoughYN2, MyalgiaYN, WeaknessYN, CoughYN
+
+
+processdata2 <- processdata %>% 
+	# remove 4 variables that were repeated symptoms with only Yes/No
+	select(-CoughYN, -CoughYN2, -MyalgiaYN, -WeaknessYN) %>% 
+	# coded as ordered factors
+	mutate(
+		CoughIntensity = factor(CoughIntensity, 
+														levels = c("None","Mild","Moderate","Severe")),
+		Myalgia        = factor(Myalgia,
+														levels = c("None","Mild","Moderate","Severe")),
+		Weakness       = factor(Weakness,
+														levels = c("None","Mild","Moderate","Severe"))
+	) 
+
+# Look up the number of each entries for binary variables
+summary(dat.clean)
+#Vision and Hearing have <50 entries in one category     
+
+dat.clean <- processdata2 %>% 
+	# remove predictors that have <50 entries in one category
+	select(-Vision, -Hearing)
+	
+```
+
+## Data setup 
+```{r}
+
+# Data Splitting------------------------------------------------------
+#set seed to fix random numbers 
+set.seed(123)
+
+# put 0.7 of data into training set, use BodyTemp as stratification
+data_split <- initial_split(dat.clean, 
+														prop = 0.7,
+														strata = BodyTemp)
+
+# create data frames for training and testing sets 
+train_data <- training(data_split)
+test_data <- testing(data_split)
+
+# create 5-fold cross-validation, 5 times repeated
+set.seed(123)
+
+folds <- vfold_cv(train_data, v = 5, repeats =5, strata = BodyTemp)
+
+# create recipe fitting BodyTemp to all predictors 
+rec <- recipes::recipe(BodyTemp ~ ., data = train_data)
+
+# create dummy variable for all predictors
+rec_all_pred <- rec %>%
+	#converts characters or factors 
+  step_dummy(all_nominal()) %>%
+	#removes indicator variables that only contain a single unique value
+  step_zv(all_predictors())
+	
+```
+
+## Null model performance
+```{r}
+# fit a linear model 
+lm_mod <- 
+  linear_reg() %>% set_engine("lm")
+
+# create recipe fitting BodyTemp to all predictors 
+rec.null <- recipes::recipe(BodyTemp ~ 1, data = train_data)
+
+# create model Workflow
+null_workflow <-
+  workflow() %>% 
+  add_model(lm_mod) %>% 
+  add_recipe(rec.null)
+
+# Preparing the recipe and train the null model
+null_fit<-
+  null_workflow %>%
+  fit(data = train_data)
+
+# Extracting and tidying the model coefficients
+null_fit %>%
+  extract_fit_parsnip() %>% 
+  tidy()
+
+### Null model Evaluation
+# we will use the RMSE as a metric to assess model performance
+
+# Use a trained workflow to predict section using test data 
+predict(null_fit, test_data)
+
+# include predicted probabilities
+null_test_aug <- augment(null_fit, test_data)
+
+# estimate RMSE for test data
+rmse_null_test <- null_test_aug %>% 
+  rmse(truth = BodyTemp, .pred)
+
+# evaluate prediction in train data
+predict(null_fit, train_data)
+
+# include predicted probabilities
+null_train_aug <- 
+  augment(null_fit, train_data) 
+
+# estimate RMSE for train data
+rmse_null_train <- null_train_aug %>% 
+  rmse(truth = BodyTemp, .pred) 
+
+rmse_null_train
+rmse_null_test
+
+
+```
+
+For this week's exercise. I will fit a tree, a LASSO model and a random forest, compare the their model performances and choose one model that best fit the data based on the tuning process. 
+
+# Model tuning and fitting
+
+
+## Decision tree
+I first followed the tidymodels tutorial for training the model using tree regression method, but I got the error of the ""a correlation computation is required, but 'estimate' is constant and has..." when I used dials to search for all tuning combinations to try for each hyperparameter, and the final tree didn't perform well, and only include sneeze as only predictor. I would like to thank Zane for the inspiration, I used "grid_latin_hypercube" for defining a grid of potential parameter values, and the codes ran without any error. 
+
+```{r}
+# model specification 
+tree_spec <- 
+  decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune(),
+    min_n = tune() # sets the minimum n to split at any node.
+  ) %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
+
+tune_spec
+
+# we will train this specification on several re-sampled data
+tree_wf <- workflow() %>% 
+  add_model(tree_spec) %>% 
+  add_recipe(rec_all_pred)
+
+
+# define a grid of potential parameter values using latin hypercube sampling
+tree_grid <- grid_latin_hypercube(
+  cost_complexity(), tree_depth(), min_n(), size = 10
+)
+
+# Grid search for parameter values
+tree_res <- tree_wf %>% 
+  tune_grid(
+    resamples = folds,
+    grid = tree_grid,
+    metrics = metric_set(rmse),
+    control = control_grid(verbose = TRUE),
+ )
+
+
+# Select single set of hyperparameter values for our best decision tree model
+best_tree <- select_best(tree_res)
+
+# Finalize our workflow with best values
+final_tree_wf <- tree_wf %>% 
+  finalize_workflow(best_tree)
+
+# Fit model to training data
+best_tree_train_fit <- final_tree_wf %>%  
+	fit(data = train_data)
+
+
+png(filename = here::here("results", "figures", "tree_algorithms.png"))
+rpart.plot::rpart.plot(
+  x = extract_fit_parsnip(best_tree_train_fit)$fit,
+  main = "Final tree-based model",
+  roundint = F,
+  type = 5,
+  digits = 4
+)
+dev.off()
+knitr::include_graphics( here::here("results", "figures", "tree_algorithms.png"))
+
+```
+
+
+## Diagnostics plots
+```{r}
+# some more diagnostics
+png(filename = here::here("results", "figures", "tree_diagnostics.png"))
+tree_res %>% autoplot()
+dev.off()
+knitr::include_graphics( here::here("results", "figures", "tree_diagnostics.png"))
+
+
+# pull predictions and residuals
+tree_train_res <- best_tree_train_fit  %>% 
+  augment(new_data = train_data) %>% 
+         select(.pred, BodyTemp) %>% 
+         mutate(.resid = BodyTemp - .pred)
+
+
+# plot Predictions vs observed values
+p1 <- ggplot(tree_train_res, aes(x = BodyTemp, y = .pred)) +
+  geom_abline(slope = 1, intercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "Decision tree: predicted vs observed",
+    x = "Observed",
+    y = "Fitted"
+  )
+
+# Plot model predictions vs residuals
+p2 <- ggplot(tree_train_res, aes(y = .resid, x = .pred)) +
+  geom_hline(yintercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "Decision tree: residuals vs fitted",
+    y = "Residuals",
+    x = "Fitted"
+  )
+
+# combine graphs
+tree_panel <- cowplot::plot_grid(p1, p2, labels = c('A', 'B'), label_size = 12, ncol =2)
+
+ggsave(filename = here::here("results", "figures", "tree_panel.png"),
+       plot = tree_panel,
+       width = 12, height = 6)
+
+knitr::include_graphics( here::here("results", "figures", "tree_panel.png"))
+
+```
+
+## LASSO model
+```{r}
+# LASSO model specification 
+lasso_spec <- 
+  linear_reg(
+    penalty = tune(),
+    mixture = 1 # make this LASSO
+  ) %>% 
+  set_engine("glmnet") %>% 
+  set_mode("regression")
+
+lasso_spec
+
+lasso_wf <- workflow() %>% 
+  add_model(lasso_spec) %>% 
+  add_recipe(rec_all_pred)
+
+# only one hyperparameter to tune here, we can set the grid up manually using a one-column # tibble with 30 candidate values
+lasso_grid <- tibble(penalty = 10^seq(-4, -1, length.out = 30))
+
+# use grid search to tune hyperparameters using cross-validation 
+lasso_res <- lasso_wf %>% 
+  tune::tune_grid(
+    resamples = folds,
+    grid = lasso_grid,
+    metrics =  metric_set(rmse),
+    control = control_grid(verbose = TRUE)
+  )
+
+# pull the best tuning parameter values
+best_lasso <- select_best(lasso_res)
+
+# Finalize workflow with best values
+final_lasso<- lasso_wf  %>% 
+  finalize_workflow(best_lasso)
+
+# Fit model to training data
+best_lasso_train_fit <- final_lasso %>%  fit(data = train_data)
+```
+
+## Diagnostics plots
+```{r}
+# LASSO variable trace plot
+x <- best_lasso_train_fit$fit$fit$fit
+plot(x, "lambda")
+```
+
+You can see the plot, each colored line represents different coefficients of the predictors in the model. As lambda approaches 0, the loss function of the model will approach the OLS loss function and model includes all of the predictors. Hence, as lambda increases, the regularization term will value more and more coefficients to 0. 
+
+
+## More diagnostics plots
+```{r}
+# some more diagnostics
+png(filename = here::here("results", "figures", "lasso_diagnostics.png"))
+lasso_res %>% autoplot()
+dev.off()
+knitr::include_graphics( here::here("results", "figures", "tree_diagnostics.png"))
+
+
+# pull predictions and residuals
+lasso_train_res <- best_lasso_train_fit  %>% 
+  augment(new_data = train_data) %>% 
+         select(.pred, BodyTemp) %>% 
+         mutate(.resid = BodyTemp - .pred)
+
+
+# plot Predictions vs observed values
+p1 <- ggplot(lasso_train_res, aes(x = BodyTemp, y = .pred)) +
+  geom_abline(slope = 1, intercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "LASSO: predicted vs observed",
+    x = "Observed",
+    y = "Fitted"
+  )
+
+# Plot model predictions vs residuals
+p2 <- ggplot(lasso_train_res, aes(y = .resid, x = .pred)) +
+  geom_hline(yintercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "LASSO: residuals vs fitted",
+    y = "Residuals",
+    x = "Fitted"
+  )
+
+# combine graphs
+lasso_panel <- cowplot::plot_grid(p1, p2, labels = c('A', 'B'), label_size = 12, ncol =2)
+
+ggsave(filename = here::here("results", "figures", "lasso_panel.png"),
+       plot = lasso_panel,
+       width = 12, height = 6)
+
+knitr::include_graphics( here::here("results", "figures", "lasso_panel.png"))
+
+```
+
+
+## Random forrest
+```{r}
+# query number of cores and see how much paralleization that can be done
+cores <- parallel::detectCores()
+cores # 4
+
+# pass information to ranger engine to set up the model
+rf_mod <- 
+  rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% 
+  set_engine("ranger", num.threads = cores) %>% 
+  set_mode("regression")
+
+# create workflow to bundle model spec and recipe
+rf_wf <- workflow() %>% 
+  add_model(rf_mod) %>% 
+  add_recipe(rec_all_pred)
+
+# show what will be tuned
+rf_mod %>%    
+  parameters()  
+
+# use a space-filling design to tune, with 25 candidate models
+set.seed(123)
+rf_res <- 
+  rf_wf %>% 
+  tune_grid(folds,
+            grid = 25,
+            control = control_grid(save_pred = TRUE),
+            metrics = metric_set(rmse))
+
+# 5 random forest models, out of the 25 candidates:
+rf_res %>% 
+  show_best(metric = "rmse")
+
+# select the best model according to RMSE metric, and the final tuning parameter values are:
+best_rf <- 
+  rf_res %>% 
+  select_best(metric = "rmse")
+
+best_rf
+
+# Finalize workflow with best values
+final_rf<- rf_wf  %>% 
+  finalize_workflow(best_rf)
+
+# Fit model to training data
+best_rf_train_fit <- final_rf %>%  fit(data = train_data)
+
+```
+
+
+## Diagnostics plots
+```{r}
+# some more diagnostics
+png(filename = here::here("results", "figures", "random_forest_diagnostics.png"))
+rf_res %>% autoplot()
+dev.off()
+knitr::include_graphics( here::here("results", "figures", "random_forest_diagnostics.png"))
+
+
+# pull predictions and residuals
+rf_train_res <- best_rf_train_fit  %>% 
+  augment(new_data = train_data) %>% 
+         select(.pred, BodyTemp) %>% 
+         mutate(.resid = BodyTemp - .pred)
+
+
+# plot Predictions vs observed values
+p1 <- ggplot(rf_train_res, aes(x = BodyTemp, y = .pred)) +
+  geom_abline(slope = 1, intercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "Random forest: predicted vs observed",
+    x = "Observed",
+    y = "Fitted"
+  )
+
+# Plot model predictions vs residuals
+p2 <- ggplot(rf_train_res, aes(y = .resid, x = .pred)) +
+  geom_hline(yintercept = 0, color = "red", lty = 2) +
+  geom_point() +
+  cowplot::theme_cowplot() +
+  labs(
+    title = "Random forest: residuals vs fitted",
+    y = "Residuals",
+    x = "Fitted"
+  )
+
+# combine graphs
+random_forest_panel <- cowplot::plot_grid(p1, p2, labels = c('A', 'B'), label_size = 12, ncol =2)
+
+ggsave(filename = here::here("results", "figures", "random_forest_panel.png"),
+       plot = random_forest_panel,
+       width = 12, height = 6)
+
+knitr::include_graphics( here::here("results", "figures", "random_forest_panel.png"))
+
+```
+
+## Model selection
+
+We can see that LASSO had better fit compared to both decision tree and random forest methods. Looking at the predicted values vs observed plot for the decision tree, it only predicts four distinct values of the body temperature, and other two methods did better. However, there are also some issue with predicting higher body temperature. So, I will 
+
+
+## Final evaluation
+```{r}
+
+```
+

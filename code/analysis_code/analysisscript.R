@@ -14,7 +14,7 @@ library(dotwhisker)  # for visualizing regression results
 
 
 
-# path to data
+# load data
 processdata <- readRDS(here::here("data","processed_data","processeddata.rds"))
 
 ###################
