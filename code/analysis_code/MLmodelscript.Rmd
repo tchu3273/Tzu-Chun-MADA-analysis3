@@ -5,6 +5,9 @@ date: "11/4/2021"
 output: html_document
 ---
 
+For this exercise, I used a influenza data provided by Dr. Handel to fit a tree-based, a LASSO model and a random forest,then compare their model performances and choose one model that best fit the data based on the tuning process. The purpose of the analysis is to create, process and validate a predictive model for predicting future outcome, which is body temperature in this exercise. You can find the full steps of data cleaning, wrangling, statistical analysis and other relevant scripts on the "Tzu-Chun-MADA-analysis3" repository. 
+
+
 ## Load needed packages
 ```{r setup, include=FALSE}
 library(tidymodels) #for model fitting 
@@ -153,7 +156,7 @@ For this week's exercise. I will fit a tree, a LASSO model and a random forest, 
 ## Decision tree
 I first followed the tidymodels tutorial for training the model using tree regression method, but I got the error of the ""a correlation computation is required, but 'estimate' is constant and has..." when I used dials to search for all tuning combinations to try for each hyperparameter, and the final tree didn't perform well, and only include sneeze as only predictor. I would like to thank Zane for the inspiration, I used "grid_latin_hypercube" for defining a grid of potential parameter values, and the codes ran without any error. 
 
-```{r}
+```{r,  warning=F, message=F}
 # model specification 
 tree_spec <- 
   decision_tree(
@@ -263,7 +266,7 @@ knitr::include_graphics( here::here("results", "figures", "tree_panel.png"))
 ```
 
 ## LASSO model
-```{r}
+```{r,  warning=F, message=F}
 # LASSO model specification 
 lasso_spec <- 
   linear_reg(
@@ -363,7 +366,7 @@ knitr::include_graphics( here::here("results", "figures", "lasso_panel.png"))
 
 
 ## Random forrest
-```{r}
+```{r,  warning=F, message=F}
 # query number of cores and see how much paralleization that can be done
 cores <- parallel::detectCores()
 cores # 4
@@ -498,6 +501,9 @@ lasso_RMSE_train %>%
   ) %>% 
   bind_rows(lasso_test_rmse) %>% 
   gt::gt(caption = "Comparison of RMSE between traing and testing data using LASSO regression.")
+
+tidy(extract_model(best_lasso_train_fit)) %>%
+  filter(lambda > 0.01 & lambda < 0.03)
 ```
 
 The result shows that the final LASSO model fits were similar between training and testing data. However, this model doesn't seem to perform any better than the Null model. 

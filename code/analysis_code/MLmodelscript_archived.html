@@ -355,7 +355,6 @@ pre code {
 </div>
 
 
-<p>For this exercise, I used a influenza data provided by Dr. Handel to fit a tree-based, a LASSO model and a random forest,then compare their model performances and choose one model that best fit the data based on the tuning process. The purpose of the analysis is to create, process and validate a predictive model for predicting future outcome, which is body temperature in this exercise. You can find the full steps of data cleaning, wrangling, statistical analysis and other relevant scripts on the “Tzu-Chun-MADA-analysis3” repository.</p>
 <div id="load-needed-packages" class="section level2">
 <h2>Load needed packages</h2>
 </div>
@@ -598,10 +597,810 @@ tree_res &lt;- tree_wf %&gt;%
     grid = tree_grid,
     metrics = metric_set(rmse),
     control = control_grid(verbose = TRUE),
- )
-
-
-# Select single set of hyperparameter values for our best decision tree model
+ )</code></pre>
+<pre><code>## Warning: package &#39;rlang&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Warning: package &#39;vctrs&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 1/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 1/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 2/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 2/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 3/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 3/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 4/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 4/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 5/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 5/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 6/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 6/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 7/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 7/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 8/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 8/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 9/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 9/10 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 10/10</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 10/10 (predictions)</code></pre>
+<pre class="r"><code># Select single set of hyperparameter values for our best decision tree model
 best_tree &lt;- select_best(tree_res)
 
 # Finalize our workflow with best values
@@ -709,9 +1508,133 @@ lasso_res &lt;- lasso_wf %&gt;%
     grid = lasso_grid,
     metrics =  metric_set(rmse),
     control = control_grid(verbose = TRUE)
-  )
-
-# pull the best tuning parameter values
+  )</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold1, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold1, Repeat1: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold2, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold2, Repeat1: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold3, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold3, Repeat1: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold4, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold4, Repeat1: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold5, Repeat1: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold5, Repeat1: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold1, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold1, Repeat2: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold2, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold2, Repeat2: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold3, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold3, Repeat2: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold4, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold4, Repeat2: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold5, Repeat2: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold5, Repeat2: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold1, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold1, Repeat3: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold2, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold2, Repeat3: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold3, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold3, Repeat3: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold4, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold4, Repeat3: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold5, Repeat3: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold5, Repeat3: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold1, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold1, Repeat4: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold2, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold2, Repeat4: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold3, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold3, Repeat4: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold4, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold4, Repeat4: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold5, Repeat4: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold5, Repeat4: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold1, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold1, Repeat5: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold2, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold2, Repeat5: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold3, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold3, Repeat5: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold4, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold4, Repeat5: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## v Fold5, Repeat5: preprocessor 1/1, model 1/1</code></pre>
+<pre><code>## i Fold5, Repeat5: preprocessor 1/1, model 1/1 (predictions)</code></pre>
+<pre class="r"><code># pull the best tuning parameter values
 best_lasso &lt;- select_best(lasso_res)
 
 # Finalize workflow with best values
@@ -815,9 +1738,9 @@ rf_res &lt;-
   tune_grid(folds,
             grid = 25,
             control = control_grid(save_pred = TRUE),
-            metrics = metric_set(rmse))
-
-# 5 random forest models, out of the 25 candidates:
+            metrics = metric_set(rmse))</code></pre>
+<pre><code>## i Creating pre-processing data to finalize unknown parameter: mtry</code></pre>
+<pre class="r"><code># 5 random forest models, out of the 25 candidates:
 rf_res %&gt;% 
   show_best(metric = &quot;rmse&quot;)</code></pre>
 <pre><code>## # A tibble: 5 x 8
@@ -1288,24 +2211,6 @@ lasso_RMSE_train %&gt;%
   
 </table>
 </div>
-<pre class="r"><code>tidy(extract_model(best_lasso_train_fit)) %&gt;%
-  filter(lambda &gt; 0.01 &amp; lambda &lt; 0.03)</code></pre>
-<pre><code>## Warning: `extract_model()` was deprecated in tune 0.1.6.
-## Please use `extract_fit_engine()` instead.</code></pre>
-<pre><code>## # A tibble: 298 x 5
-##    term         step estimate lambda dev.ratio
-##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
-##  1 (Intercept)    25     98.4 0.0292     0.154
-##  2 (Intercept)    26     98.4 0.0266     0.157
-##  3 (Intercept)    27     98.3 0.0242     0.158
-##  4 (Intercept)    28     98.3 0.0221     0.160
-##  5 (Intercept)    29     98.3 0.0201     0.161
-##  6 (Intercept)    30     98.3 0.0183     0.163
-##  7 (Intercept)    31     98.3 0.0167     0.164
-##  8 (Intercept)    32     98.2 0.0152     0.165
-##  9 (Intercept)    33     98.2 0.0139     0.165
-## 10 (Intercept)    34     98.2 0.0126     0.166
-## # ... with 288 more rows</code></pre>
 <p>The result shows that the final LASSO model fits were similar between training and testing data. However, this model doesn’t seem to perform any better than the Null model.</p>
 </div>
 </div>
