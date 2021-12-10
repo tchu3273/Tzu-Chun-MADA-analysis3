@@ -110,8 +110,3 @@ saveRDS(res_lm_aov, file = here::here("results", "res_lm_aov.Rds"))
 saveRDS(res_glm_aov, file = here::here("results", "res_glm_aov.Rds"))
 ggsave(dotwhisker_cont_all_pred, filename = here::here("results", "dotwhisker_cont_all_pred.png"), height = 8.5, width = 11)
 ggsave(dotwhisker_binary_all_pred, filename = here::here("results", "dotwhisker_binary_all_pred.png"), height = 8.5, width = 11)
-
-
-
-#
-print("hating this")
